@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!-- pages-campaign site for Epsilon0xCell/AI-Image-Generator; source of truth: AI-Image-Generator-Website/ on the default branch -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Image-Generator - a field guide to generate.py</title>
+<style>
+/* I set this page out like the notebook I kept while tuning the palettes: numbered entries, values written next to the thing they belong to, nothing floating in a card. The swatches below use the exact RGB stops from generate.py, so the page and the program cannot drift apart without somebody noticing. */
+:root{--paper:#faf6ec;--ink:#22201a;--dim:#6d675a;--rule:#cfc7b2;--accent:#5b21b6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.62}
+.sheet{max-width:880px;margin:0 auto;padding:0 30px}
+.masthead{border-bottom:3px double var(--ink);padding:30px 0 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.masthead .field{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase}
+.masthead nav a{color:var(--accent);margin-left:16px;font-size:.95rem}
+h1{font-size:2.55rem;line-height:1.1;margin:20px 0 10px;font-weight:700}
+.dek{font-size:1.14rem;color:var(--dim);max-width:38rem;margin:0 0 8px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px}
+.badges img{height:20px}
+.heroimg{margin:22px 0 0}
+.heroimg img{max-width:100%;display:block;border:1px solid var(--ink)}
+.heroimg figcaption{font-size:.88rem;color:var(--dim);margin-top:8px;display:flex;gap:16px;align-items:center}
+.heroimg figcaption img{width:54px;border:1px solid var(--ink)}
+section{padding:30px 0;border-bottom:1px solid var(--rule)}
+h2{font-size:1.4rem;margin:0 0 14px}
+h2 .no{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;color:var(--accent);margin-right:10px}
+p{max-width:42rem}
+.entry{margin:0 0 22px}
+.entry h3{font-size:1.1rem;margin:0 0 4px}
+.entry p{margin:0;color:var(--ink)}
+.entry .spec{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;color:var(--dim)}
+.swatches{display:grid;grid-template-columns:1fr 1fr;gap:22px 34px;max-width:46rem}
+@media(max-width:680px){.swatches{grid-template-columns:1fr}}
+.swatch h3{font-size:1rem;margin:0 0 6px}
+.strip{display:flex;height:26px;border:1px solid var(--ink)}
+.strip i{flex:1}
+.swatch .vals{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;color:var(--dim);margin-top:6px;line-height:1.5}
+pre{font-family:ui-monospace,Menlo,Consolas,monospace;background:#22201a;color:#faf6ec;padding:17px 19px;overflow-x:auto;font-size:.92rem;line-height:1.55}
+pre .c{color:#c9b8f5}
+table{border-collapse:collapse;font-size:.97rem}
+th,td{border-bottom:1px solid var(--rule);padding:8px 22px 8px 0;text-align:left;vertical-align:top}
+th{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.status{border:2px solid var(--ink);padding:18px 20px;max-width:44rem}
+.status p{margin:0}
+.status p + p{margin-top:10px}
+.chips{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem}
+.chips span{border:1px solid var(--ink);padding:3px 11px;margin-right:8px;display:inline-block;margin-bottom:8px}
+footer{padding:26px 0 48px;color:var(--dim);font-size:.94rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<div class="masthead">
+  <div class="field">Field guide - one file, generate.py</div>
+  <nav>
+    <a href="https://github.com/Epsilon0xCell/AI-Image-Generator">Repository</a>
+    <a href="https://github.com/Epsilon0xCell">My GitHub profile</a>
+  </nav>
+</div>
+
+<h1>A prompt goes in. The same PNG comes out, every time.</h1>
+<p class="dek">AI-Image-Generator is a small offline program I wrote in one Python file. It turns any text prompt into a PNG using math seeded by the prompt itself. No API key, no network call, no library beyond the Python standard library.</p>
+
+<div class="badges">
+  <img alt="GitHub stars" src="https://img.shields.io/github/stars/Epsilon0xCell/AI-Image-Generator?style=flat&color=5b21b6&label=stars">
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/Epsilon0xCell/AI-Image-Generator?style=flat&color=5b21b6&label=forks">
+  <img alt="Last commit" src="https://img.shields.io/github/last-commit/Epsilon0xCell/AI-Image-Generator?style=flat&color=5b21b6&label=last%20commit">
+  <img alt="Top language" src="https://img.shields.io/github/languages/top/Epsilon0xCell/AI-Image-Generator?style=flat&color=5b21b6">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/Epsilon0xCell/AI-Image-Generator?style=flat&color=5b21b6&label=size">
+</div>
+
+<figure class="heroimg">
+  <img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/banner.png" alt="AI-Image-Generator banner from the repository">
+  <figcaption><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/logo.png" alt="AI-Image-Generator logo from the repository"> The banner and logo are the repo files, shown at the sizes this page needs. The images the program itself makes look nothing like them, and entry 1 below explains why.</figcaption>
+</figure>
+
+<section>
+  <h2><span class="no">Entry 1</span>What this is</h2>
+  <p>I wanted to know if a text prompt could be an image seed, with nothing else involved. generate.py takes the SHA-256 hash of your prompt and treats it as the identity of the picture. Bytes 0 to 7 of that hash seed the random number generator that builds the picture field. Byte 8, on its own, picks which of the four color palettes the picture gets. I keep those two uses apart on purpose. In the campaign check of this repo, the same prompt at the same size produced a file with an identical md5 before and after a comment pass, because that sameness is the contract of the whole program.</p>
+  <p>From the seed, the program builds a plasma field out of sine waves, then shapes it three ways, which are the styles in entry 2. Every pixel is computed in plain Python, one row at a time, and the rows go into a PNG encoder I wrote by hand with struct and zlib. There is no model, no training data, and no image service behind it.</p>
+  <p>One line in my README needs a plain reading. It says Google AI Studio Imagen v4 Ultra, which was the picture I had in my head when I named the project. The code does not call Imagen, or Google, or anything else. It runs fully offline, as the README also says, and the PNG on your disk was drawn by the math in this one file.</p>
+</section>
+
+<section>
+  <h2><span class="no">Entry 2</span>The three styles</h2>
+  <div class="entry">
+    <h3>plasma (the default)</h3>
+    <p>Four seeded sine waves averaged together, then mapped through the palette. Soft fields and clouds. This is the style the README examples lean on for nebula type prompts.</p>
+    <p class="spec">--style plasma</p>
+  </div>
+  <div class="entry">
+    <h3>waves</h3>
+    <p>The plasma value is fed back into a sine, so the wave fronts bend instead of running straight. You get interference bands that curve around the field.</p>
+    <p class="spec">--style waves</p>
+  </div>
+  <div class="entry">
+    <h3>orbit</h3>
+    <p>A radial falloff around a seeded center point. The sine of the distance is folded with an absolute value, so the falloff reads as tight rings instead of soft bands.</p>
+    <p class="spec">--style orbit</p>
+  </div>
+  <p>All three styles draw their field seeds and their orbit center in the same fixed order. That is deliberate: if values were drawn only when a style needed them, switching styles on one prompt would change the field too, and comparing styles would stop meaning anything.</p>
+</section>
+
+<section>
+  <h2><span class="no">Entry 3</span>The four palettes</h2>
+  <p>Byte 8 of the prompt hash picks one of these, by taking the byte modulo 4. Each palette runs from its darkest stop to white, in order, because the color function walks the list as the field value rises.</p>
+  <!-- I printed the RGB stops under each strip because a strip alone cannot be checked. With the numbers here, anyone can open generate.py and confirm this page copied the PALETTES list instead of approximating it. -->
+  <div class="swatches">
+    <div class="swatch">
+      <h3>Violet nebula</h3>
+      <div class="strip"><i style="background:rgb(10,10,26)"></i><i style="background:rgb(91,33,182)"></i><i style="background:rgb(167,139,250)"></i><i style="background:rgb(255,255,255)"></i></div>
+      <div class="vals">(10, 10, 26) - (91, 33, 182) - (167, 139, 250) - white</div>
+    </div>
+    <div class="swatch">
+      <h3>Deep ocean</h3>
+      <div class="strip"><i style="background:rgb(4,20,32)"></i><i style="background:rgb(0,119,182)"></i><i style="background:rgb(72,202,228)"></i><i style="background:rgb(255,255,255)"></i></div>
+      <div class="vals">(4, 20, 32) - (0, 119, 182) - (72, 202, 228) - white</div>
+    </div>
+    <div class="swatch">
+      <h3>Ember</h3>
+      <div class="strip"><i style="background:rgb(26,8,8)"></i><i style="background:rgb(153,27,27)"></i><i style="background:rgb(249,115,22)"></i><i style="background:rgb(255,237,213)"></i></div>
+      <div class="vals">(26, 8, 8) - (153, 27, 27) - (249, 115, 22) - (255, 237, 213)</div>
+    </div>
+    <div class="swatch">
+      <h3>Matrix green</h3>
+      <div class="strip"><i style="background:rgb(6,26,16)"></i><i style="background:rgb(22,101,52)"></i><i style="background:rgb(74,222,128)"></i><i style="background:rgb(240,253,244)"></i></div>
+      <div class="vals">(6, 26, 16) - (22, 101, 52) - (74, 222, 128) - (240, 253, 244)</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">Entry 4</span>How to run it</h2>
+  <pre><span class="c"># the two examples from my README</span>
+python3 generate.py "a violet nebula over a dark ocean"
+python3 generate.py "geometric sunrise" --style waves --size 800
+
+<span class="c"># name the output yourself when you want to</span>
+python3 generate.py "circuit dreams" --style orbit -o dreams.png</pre>
+  <table>
+    <tr><th>Option</th><th>What it does</th></tr>
+    <tr><td>--style</td><td>plasma, waves, or orbit. Default is plasma.</td></tr>
+    <tr><td>--size</td><td>Square size in pixels, 16 to 2048. Default is 512. Out of range exits with an error and code 1.</td></tr>
+    <tr><td>-o / --output</td><td>Output file name. Without it, the name comes from the first 10 characters of the prompt hash, so the same prompt overwrites its own old file.</td></tr>
+  </table>
+  <p style="margin-top:16px">Cost grows with the square of the size, because every pixel is computed in Python. The size cap is checked before any work starts, so a typo like 20000 fails at once instead of running for a long time.</p>
+</section>
+
+<section>
+  <h2><span class="no">Entry 5</span>Status, stated plainly</h2>
+  <div class="status">
+    <p><b>There is real code here, and it runs.</b> While this page was being made, generate.py was run with the prompt "a violet nebula over a dark ocean" at size 64. It wrote image-68f08cce2c.png, 6,393 bytes, and the file header checked out as a valid PNG.</p>
+    <p><b>What it is not:</b> it is not a hosted image service, it has no web page of its own, and this repo carries no LICENSE file, so there is no license badge on this page. The pictures are procedural art from a hash, not photographs and not model output. If you need a picture of a specific real thing, this is the wrong tool, and I would rather say that here than dress the repo up as something bigger.</p>
+  </div>
+  <p style="margin-top:18px">The file itself: <a href="https://github.com/Epsilon0xCell/AI-Image-Generator">github.com/Epsilon0xCell/AI-Image-Generator</a>.</p>
+  <div class="chips"><span>Python 3</span><span>Standard library only</span><span>SHA-256 seeded</span><span>Hand written PNG encoder</span></div>
+</section>
+
+<footer>
+  <span>Built by Epsilon0xCell</span>
+  <span>Guide written from generate.py as it stands in the repo.</span>
+</footer>
+
+</div>
+</body>
+</html>
