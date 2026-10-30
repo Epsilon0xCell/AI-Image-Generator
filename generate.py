@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Best AI Image Generator - prompt-seeded generative art, fully offline.
+"""AI Image Generator - prompt-seeded generative art, fully offline.
 
 Turns any text prompt into a unique PNG image using procedural art
 (plasma fields, wave interference and orbit traps) seeded by the prompt.
@@ -45,6 +45,11 @@ def plasma(x, y, w, h, rng_seeds):
 
 
 def render(prompt, style, size):
+    # The prompt hash is the whole identity of the image. Bytes 0 to 7 seed
+    # the RNG that picks the field shapes, and byte 8 picks the palette on
+    # its own, so the palette choice does not depend on how many numbers the
+    # RNG happened to draw first. Keep those two uses separate: merging them
+    # would change every existing prompt's image.
     digest = hashlib.sha256(prompt.encode()).digest()
     rng = random.Random(int.from_bytes(digest[:8], "big"))
     palette = PALETTES[digest[8] % len(PALETTES)]
@@ -65,6 +70,8 @@ def render(prompt, style, size):
                 d = math.hypot(nx - cx, ny - cy)
                 t = abs(math.sin(d * 22 - plasma(x, y, size, size, seeds) * 4))
             row += bytes(color_at(palette, t))
+        # PNG scanlines start with a filter-type byte; 0 means "no filter",
+        # which keeps the encoder honest and the decoder trivial.
         rows.append(b"\x00" + bytes(row))
     return b"".join(rows)
 
