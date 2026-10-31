@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!-- pages-campaign site for Epsilon0xCell/AI-Image-Generator; source of truth: AI-Image-Generator-Website/ on the default branch -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Image-Generator: the contact sheet</title>
+<style>
+/* I built this page as a contact sheet because that is what I actually had in front of me: a strip of frames that came out of one program, in order, with notes written under each one. The black is a darkroom black, not a theme color I picked from a palette site. */
+:root{--black:#0b0b0d;--panel:#141416;--line:#2c2c30;--paper:#e8e2d4;--dim:#a49d8d;--red:#c8452c;--amber:#d9a441}
+*{box-sizing:border-box}
+body{margin:0;background:var(--black);color:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+a{color:var(--amber)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+/* I drew the sprocket holes with repeating gradients down both edges, the way a film strip carries its own frame line with it. No image file, just CSS, so the edging cannot go missing. */
+.sheet{border-left:22px solid #000;border-right:22px solid #000;background-image:radial-gradient(circle at 11px 18px,#26262a 4px,transparent 5px),radial-gradient(circle at calc(100% - 11px) 18px,#26262a 4px,transparent 5px);background-size:22px 36px,22px 36px;background-position:left top,right top;background-repeat:repeat-y;padding:0 34px}
+@media(max-width:640px){.sheet{padding:0 14px;border-left-width:12px;border-right-width:12px}}
+header{padding:38px 0 22px;border-bottom:1px solid var(--line)}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+h1{font-size:2.6rem;line-height:1.08;margin:14px 0 12px;font-weight:800;max-width:22ch}
+.dek{color:var(--dim);font-size:1.08rem;max-width:42rem;margin:0}
+nav{margin-top:16px;display:flex;gap:20px;flex-wrap:wrap;font-size:.95rem}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 4px}
+.badges img{height:20px}
+section{padding:34px 0;border-bottom:1px solid var(--line)}
+h2{font-size:1.45rem;margin:0 0 8px}
+h2 .no{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;color:var(--red);letter-spacing:.12em;display:block;margin-bottom:6px}
+.lede{color:var(--dim);max-width:44rem;margin:0 0 20px}
+.frame{background:#050506;border:1px solid var(--line);padding:14px;margin:0 0 28px}
+.frame img{display:block;width:100%;height:auto;background:#000}
+.frame figcaption{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.84rem;color:var(--dim);padding:12px 2px 2px;line-height:1.7}
+.frame figcaption b{color:var(--paper);font-weight:600}
+.frame.wide{max-width:100%}
+.frame.mid{max-width:720px}
+.frame.small{max-width:520px}
+.frame .num{color:var(--red)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.lab figure{background:var(--panel);border:1px solid var(--line);margin:0;padding:12px}
+.lab img{width:100%;height:auto;display:block;background:#fff}
+.lab figcaption{font-size:.88rem;color:var(--dim);padding-top:10px}
+.brandrow{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:26px}
+.brandrow figure{margin:0;background:var(--panel);border:1px solid var(--line);padding:12px;flex:1 1 260px}
+.brandrow img{width:100%;height:auto;display:block}
+.brandrow .logoimg{max-width:180px}
+.brandrow figcaption{font-size:.88rem;color:var(--dim);padding-top:10px}
+pre{background:#050506;border:1px solid var(--line);color:#e8e2d4;padding:16px 18px;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86rem;line-height:1.55}
+pre .note{color:#8f887a}
+table{border-collapse:collapse;width:100%;max-width:46rem}
+th,td{border-bottom:1px solid var(--line);padding:8px 18px 8px 0;text-align:left;vertical-align:top}
+th{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.swatches{display:grid;grid-template-columns:1fr 1fr;gap:22px 30px;max-width:52rem}
+@media(max-width:680px){.swatches{grid-template-columns:1fr}}
+.swatch h3{font-size:1rem;margin:0 0 6px}
+.strip{display:flex;height:28px;border:1px solid #000;outline:1px solid var(--line)}
+.strip i{flex:1}
+.swatch .vals{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;color:var(--dim);margin-top:6px;line-height:1.6}
+.status{border:1px solid var(--amber);padding:18px 20px;max-width:46rem;background:#12100a}
+.status p{margin:0}
+.status p+p{margin-top:10px}
+.stylebox{border-top:1px solid var(--line);padding:14px 0}
+.stylebox h3{margin:0 0 4px;font-size:1.05rem}
+.stylebox p{margin:0;color:var(--dim);max-width:44rem}
+footer{padding:28px 0 48px;color:var(--dim);font-size:.94rem}
+footer p{margin:4px 0}
+/* I keep the dim state out of the stylesheet on purpose. My script adds the js class and sets the starting opacity, so if the script never runs, every frame is already fully developed and readable. */
+.js .frame,.js .stripwrap{transition:opacity .9s ease,transform .9s ease}
+.js .frame.pre,.js .stripwrap.pre{opacity:.12;transform:translateY(10px)}
+.js .frame.in,.js .stripwrap.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+.js .frame,.js .stripwrap{transition:none}
+.js .frame.pre,.js .stripwrap.pre{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="sheet">
+
+<header>
+<div class="kicker">Contact sheet, one roll, three frames exposed by generate.py</div>
+<h1>AI-Image-Generator: the contact sheet</h1>
+<p class="dek">I am Gavin K. I wrote one Python file, generate.py, that turns a text prompt into a PNG. This page is my contact sheet for it: the frames below are the actual files the program wrote when I ran it for this rebuild, with the prompt, style, size, and byte count written under each one the way I would write them in pencil on a sheet in the darkroom.</p>
+<nav>
+<a href="https://github.com/Epsilon0xCell/AI-Image-Generator">The repository</a>
+<a href="https://github.com/Epsilon0xCell">My GitHub profile, Epsilon0xCell</a>
+<a href="#run">Run it</a>
+<a href="#status">Status, plainly</a>
+</nav>
+<div class="badges">
+<img alt="GitHub stars" src="https://img.shields.io/github/stars/Epsilon0xCell/AI-Image-Generator?style=flat&label=stars">
+<img alt="GitHub forks" src="https://img.shields.io/github/forks/Epsilon0xCell/AI-Image-Generator?style=flat&label=forks">
+<img alt="Last commit" src="https://img.shields.io/github/last-commit/Epsilon0xCell/AI-Image-Generator?style=flat&label=last%20commit">
+<img alt="Top language" src="https://img.shields.io/github/languages/top/Epsilon0xCell/AI-Image-Generator?style=flat">
+<img alt="Repository size" src="https://img.shields.io/github/repo-size/Epsilon0xCell/AI-Image-Generator?style=flat&label=size">
+<img alt="License, MIT" src="https://img.shields.io/github/license/Epsilon0xCell/AI-Image-Generator?style=flat&label=license">
+</div>
+</header>
+
+<section id="sheet">
+<h2><span class="no">Frames 1 to 3</span>The sheet</h2>
+<p class="lede">Three prompts, three styles, three different sizes on the page because the files themselves are different sizes. I did not retouch, crop, or re-encode any of them. I copied generate.py to a scratch folder, ran it there, and moved the PNGs it wrote into assets/ in this site folder under the names the program gave them.</p>
+
+<figure class="frame wide">
+<img src="assets/image-68f08cce2c.png" alt="Procedural plasma image generated from the prompt a violet nebula over a dark ocean, in soft violet and dark tones">
+<figcaption><span class="num">Frame 1.</span> <b>Prompt:</b> "a violet nebula over a dark ocean" &nbsp; <b>Style:</b> plasma (the default) &nbsp; <b>Size:</b> 512x512 &nbsp; <b>File:</b> assets/image-68f08cce2c.png &nbsp; <b>Bytes:</b> 65,924. First frame on the roll, and the one the file name tells on itself: without an output flag, the program names the file from the first 10 characters of the prompt hash.</figcaption>
+</figure>
+
+<figure class="frame mid">
+<img src="assets/image-416de0b5ae.png" alt="Procedural waves image generated from the prompt geometric sunrise, with bending interference bands">
+<figcaption><span class="num">Frame 2.</span> <b>Prompt:</b> "geometric sunrise" &nbsp; <b>Style:</b> waves &nbsp; <b>Size:</b> 800x800 &nbsp; <b>File:</b> assets/image-416de0b5ae.png &nbsp; <b>Bytes:</b> 218,816. The big frame. At 800 pixels the pure Python pixel loop has more work to do, and the file is more than three times the size of frame 1.</figcaption>
+</figure>
+
+<figure class="frame small">
+<img src="assets/dreams.png" alt="Procedural orbit image generated from the prompt circuit dreams, with tight rings around a seeded center">
+<figcaption><span class="num">Frame 3.</span> <b>Prompt:</b> "circuit dreams" &nbsp; <b>Style:</b> orbit &nbsp; <b>Size:</b> 512x512 &nbsp; <b>File:</b> assets/dreams.png &nbsp; <b>Bytes:</b> 282,591. The only frame where I chose the file name myself, with the -o flag. Same 512 size as frame 1, far more bytes, because the rings hold more detail for the PNG compressor to keep.</figcaption>
+</figure>
+</section>
+
+<section id="how">
+<h2><span class="no">Notes on the process</span>How a prompt becomes a picture</h2>
+<p class="lede">The hash contract is the whole program. I take the SHA-256 hash of the prompt text. Bytes 0 to 7 seed the random number generator. Byte 8 picks the palette. Same prompt, same hash, same seed, same picture, every time, on any machine running the same code. Change one letter in the prompt and you get a different hash and a different picture.</p>
+
+<!-- Code capture: generate.py lines 60 to 68 at head 575d5fcf13732af2357c6ed014489be9bfc74b1a. I show the start of render() exactly as it stands in the file, comment included, nothing clipped. -->
+<pre>def render(prompt, style, size):
+    # The prompt hash is the whole identity of the image. I seed the RNG
+    # from digest bytes 0 to 7, and I let byte 8 pick the palette on its
+    # own, so the palette choice does not depend on how many numbers the
+    # RNG happened to draw first. I keep those two uses separate. If I
+    # merged them, I would change every existing prompt's image.
+    digest = hashlib.sha256(prompt.encode()).digest()
+    rng = random.Random(int.from_bytes(digest[:8], "big"))
+    palette = PALETTES[digest[8] % len(PALETTES)]</pre>
+<p class="mono" style="font-size:.84rem;color:var(--dim)">Source: generate.py, lines 60 to 68, at the head commit for this rebuild. I keep the RNG seed and the palette pick in separate steps on purpose, so the palette does not depend on how many numbers the RNG drew first.</p>
+
+<h3 style="margin-top:26px">The three styles</h3>
+<div class="stylebox">
+<h3>plasma, the default</h3>
+<p>Four seeded sine waves averaged together, shifted into the 0 to 1 range, then mapped through the palette. Soft fields. This is frame 1.</p>
+<p class="mono" style="font-size:.84rem">--style plasma</p>
+</div>
+<div class="stylebox">
+<h3>waves</h3>
+<p>I feed the plasma value back into a sine, so the wave fronts bend instead of running straight. The result is interference bands that curve around the field. This is frame 2.</p>
+<p class="mono" style="font-size:.84rem">--style waves</p>
+</div>
+<div class="stylebox">
+<h3>orbit</h3>
+<p>A radial falloff around a seeded center. I take the absolute value of the sine of the distance, which folds each wave back on itself, so the falloff reads as tight rings. This is frame 3.</p>
+<p class="mono" style="font-size:.84rem">--style orbit</p>
+</div>
+<p style="color:var(--dim);max-width:44rem">All three styles draw their four field seeds and their orbit center in the same fixed order, even when a style does not use the center. If I drew values only when a style needed them, switching styles on one prompt would change the field too, and comparing styles would stop meaning anything.</p>
+
+<h3 style="margin-top:26px">The four palettes</h3>
+<p class="lede">Byte 8 of the hash, taken modulo 4, picks one of these. I drew each strip from the literal values in the PALETTES list in generate.py and printed the RGB numbers under it, so anyone can open the file and check my strips against the code, stop by stop. Each palette runs from its darkest stop toward white, because the color function walks the list in order as the field value rises.</p>
+<div class="swatches">
+<div class="swatch"><h3>Violet nebula</h3><div class="stripwrap"><div class="strip"><i style="background:rgb(10,10,26)"></i><i style="background:rgb(91,33,182)"></i><i style="background:rgb(167,139,250)"></i><i style="background:rgb(255,255,255)"></i></div></div><div class="vals">RGB (10, 10, 26), (91, 33, 182), (167, 139, 250), (255, 255, 255)</div></div>
+<div class="swatch"><h3>Deep ocean</h3><div class="stripwrap"><div class="strip"><i style="background:rgb(4,20,32)"></i><i style="background:rgb(0,119,182)"></i><i style="background:rgb(72,202,228)"></i><i style="background:rgb(255,255,255)"></i></div></div><div class="vals">RGB (4, 20, 32), (0, 119, 182), (72, 202, 228), (255, 255, 255)</div></div>
+<div class="swatch"><h3>Ember</h3><div class="stripwrap"><div class="strip"><i style="background:rgb(26,8,8)"></i><i style="background:rgb(153,27,27)"></i><i style="background:rgb(249,115,22)"></i><i style="background:rgb(255,237,213)"></i></div></div><div class="vals">RGB (26, 8, 8), (153, 27, 27), (249, 115, 22), (255, 237, 213)</div></div>
+<div class="swatch"><h3>Matrix green</h3><div class="stripwrap"><div class="strip"><i style="background:rgb(6,26,16)"></i><i style="background:rgb(22,101,52)"></i><i style="background:rgb(74,222,128)"></i><i style="background:rgb(240,253,244)"></i></div></div><div class="vals">RGB (6, 26, 16), (22, 101, 52), (74, 222, 128), (240, 253, 244)</div></div>
+</div>
+<p style="color:var(--dim);max-width:44rem;margin-top:18px">After the field is built, every pixel is computed in plain Python, one row at a time, and the rows go into a PNG encoder I wrote by hand with struct and zlib from the standard library. No image library wrote these files. I did, through that encoder.</p>
+</section>
+
+<section id="lab">
+<h2><span class="no">Lab notes</span>The hand drawn sheets</h2>
+<p class="lede">Before and alongside the code, I drew the project out on paper style sheets and kept them in the repo. These are those repo files, not outputs of generate.py, and I caption them as what they are. The banner and logo sit above them because they are the marks I made for the repo itself.</p>
+
+<div class="brandrow">
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/banner.png" alt="Repository banner for AI-Image-Generator"><figcaption>The repo banner, banner.png on main. A title card for the repository, not a generated output.</figcaption></figure>
+<figure><img class="logoimg" src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/logo.png" alt="Repository logo for AI-Image-Generator"><figcaption>The repo logo, logo.png on main. The mark I use for the project in listings and readmes.</figcaption></figure>
+</div>
+
+<div class="grid lab">
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/AI-Image-Generator-Visuals/architecture.png" alt="Hand drawn architecture diagram for AI-Image-Generator showing the parts of the program"><figcaption>Architecture sheet, from AI-Image-Generator-Visuals/architecture.png. How I laid out the parts of the one file program before they settled.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/AI-Image-Generator-Visuals/data-flow.png" alt="Hand drawn data flow diagram showing a prompt moving through hashing and rendering to a PNG"><figcaption>Data flow sheet, from AI-Image-Generator-Visuals/data-flow.png. The path a prompt takes: text in, hash, field, palette, PNG out.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/AI-Image-Generator-Visuals/flowchart.png" alt="Hand drawn flowchart for the generate.py program flow"><figcaption>Flowchart sheet, from AI-Image-Generator-Visuals/flowchart.png. The run order, including the size check that happens before any pixel work starts.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/AI-Image-Generator-Visuals/product-map.png" alt="Hand drawn product map for AI-Image-Generator"><figcaption>Product map sheet, from AI-Image-Generator-Visuals/product-map.png. Where I placed this small offline tool among the things I build.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/AI-Image-Generator-Visuals/statistics.png" alt="Hand drawn statistics sheet for AI-Image-Generator"><figcaption>Statistics sheet, from AI-Image-Generator-Visuals/statistics.png. Counts and sizes I noted while working on the program.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/AI-Image-Generator/main/AI-Image-Generator-Visuals/schematic.png" alt="Hand drawn schematic for the AI-Image-Generator PNG encoding and rendering"><figcaption>Schematic sheet, from AI-Image-Generator-Visuals/schematic.png. A closer drawing of the rendering and PNG writing steps.</figcaption></figure>
+</div>
+</section>
+
+<section id="run">
+<h2><span class="no">In the lab</span>Run it</h2>
+<p class="lede">You need Python 3 and nothing else to install. Clone the repo, then run the file. The transcript below is not an example I typed up to look right. It is the run I made for this page, on 2026-10-31, against head commit 575d5fcf13732af2357c6ed014489be9bfc74b1a, and the three Wrote lines are the lines the program printed to me. Those runs made frames 1 to 3 above.</p>
+<pre><span class="note"># My actual runs for this page, 2026-10-31, head 575d5fcf13732af2357c6ed014489be9bfc74b1a</span>
+$ python3 generate.py "a violet nebula over a dark ocean"
+Wrote image-68f08cce2c.png (512x512, style=plasma)
+$ python3 generate.py "geometric sunrise" --style waves --size 800
+Wrote image-416de0b5ae.png (800x800, style=waves)
+$ python3 generate.py "circuit dreams" --style orbit -o dreams.png
+Wrote dreams.png (512x512, style=orbit)</pre>
+<table>
+<tr><th>Option</th><th>What it does</th></tr>
+<tr><td class="mono">--style</td><td>plasma, waves, or orbit. Default is plasma.</td></tr>
+<tr><td class="mono">--size</td><td>Square size in pixels, from 16 to 2048. Default is 512. A size outside that range exits with an error before any work starts.</td></tr>
+<tr><td class="mono">-o / --output</td><td>Output file name. Without it, the name comes from the first 10 characters of the prompt hash, so the same prompt overwrites its own old file instead of piling up copies.</td></tr>
+</table>
+<p style="color:var(--dim);max-width:44rem;margin-top:14px">Cost grows with the square of the size, because every pixel is computed in Python. That is why the size cap is checked first: a typo like 20000 would otherwise run for a long time before failing.</p>
+</section>
+
+<section id="status">
+<h2><span class="no">Last note on the sheet</span>Status, stated plainly</h2>
+<div class="status">
+<p><b>What this program is.</b> A single Python file that runs fully offline. It makes no network call and takes no API key. Its output is procedural art from a hash of the prompt: math drawn pixel by pixel, not photographs, and not model output.</p>
+<p><b>About the name in my README.</b> The first line of my README names Google AI Studio Imagen v4 Ultra. That name does not describe a call the code makes. generate.py does not call Imagen, Google, or any other service. If you read the file top to bottom, you will find hashlib, random, math, struct, and zlib, and no network code at all. I would rather state that here, on the sheet, than let the README line imply a service behind a program that has none.</p>
+<p><b>What to expect from it.</b> Give it a prompt whose picture you can predict, like a cat on a roof, and it will not draw that cat. It will draw the field that prompt hashes to, in the palette byte 8 selects. That limit is the point of the project for me: the prompt is a seed, not a description the program understands.</p>
+</div>
+</section>
+
+<footer>
+<p>Built by Epsilon0xCell</p>
+<p>Colophon: I set this page as a contact sheet in a near black darkroom layout, with film sprocket edging drawn in CSS, system fonts only, and no frameworks. The three frames in assets/ are unedited files written by generate.py on 2026-10-31. The palette strips use the literal RGB values from PALETTES in generate.py.</p>
+<p><a href="https://github.com/Epsilon0xCell/AI-Image-Generator">github.com/Epsilon0xCell/AI-Image-Generator</a></p>
+</footer>
+
+</div></div>
+<script>
+/* I add the developing effect from here, and only from here. If this script does not run, the frames stay fully visible, because I never hid them in the stylesheet. */
+(function(){
+  document.documentElement.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var items = Array.prototype.slice.call(document.querySelectorAll('.frame, .stripwrap'));
+  if (reduce || !('IntersectionObserver' in window)) { return; }
+  items.forEach(function(el, i){
+    el.classList.add('pre');
+    el.style.transitionDelay = (Math.min(i, 5) * 90) + 'ms';
+  });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.remove('pre'); e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold: 0.12});
+  items.forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
